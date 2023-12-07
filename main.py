@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 
 def read_input_file(file_path):
@@ -35,19 +36,26 @@ def calculate_completion_sum(n, tasks, setup_times, sequence):
 
 
 def main():
-    input_file_path = "in_148156_500.txt"
-    output_file_path = "out" + input_file_path[2:]
 
-    subprocess.call(['java', '-jar', 'szeregowanie_zadan-1.0.jar', input_file_path])
+    directory = 'in'
 
-    n, tasks, setup_times = read_input_file(input_file_path)
-    expected_completion_sum, sequence = read_output_file(output_file_path)
-    calculated_completion_sum = calculate_completion_sum(n, tasks, setup_times, sequence)
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f):
 
-    if calculated_completion_sum == expected_completion_sum:
-        print("Sekwencja jest poprawna.")
-    else:
-        print(f"Sekwencja jest niepoprawna. Oczekiwana suma: {expected_completion_sum}, obliczona suma: {calculated_completion_sum}")
+            input_file_path = f
+            parts = input_file_path.split("_")
+            output_file_path = f"out/out_{parts[1]}_148136_{parts[2]}"
+            subprocess.call(['148136.exe', input_file_path, output_file_path])
+
+            n, tasks, setup_times = read_input_file(input_file_path)
+            expected_completion_sum, sequence = read_output_file(output_file_path)
+            calculated_completion_sum = calculate_completion_sum(n, tasks, setup_times, sequence)
+
+            if calculated_completion_sum == expected_completion_sum:
+                print("Sekwencja jest poprawna.")
+            else:
+                print(f"Sekwencja jest niepoprawna. Oczekiwana suma: {expected_completion_sum}, obliczona suma: {calculated_completion_sum}")
 
 
 if __name__ == "__main__":
